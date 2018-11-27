@@ -5,4 +5,17 @@ target_include_directories(rsm INTERFACE .)
 
 target_sources(rsm INTERFACE
   rsm/rsm.hpp
+  rsm/init.hpp
+  rsm/lds.hpp
+  rsm/next.hpp
+  rsm/options.hpp
+  rsm/range.hpp
+  rsm/utils.hpp
+  rsm/detail/common.hpp
+  rsm/detail/lds.hpp
+  rsm/detail/memory.hpp
+  rsm/detail/primes.hpp
+  rsm/generators/pcg32.hpp
+  rsm/samplers/halton.hpp
+  rsm/samplers/stratified.hpp
 )
