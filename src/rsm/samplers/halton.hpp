@@ -72,7 +72,7 @@ T sample_vec(const halton_sampler<MaxDim>& sampler)
     for(size_t dim=0; dim<N; ++dim) {
         v[dim] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
     }
-    sampler.offset++;
+    ++sampler.offset;
     return v;
 }
 
@@ -87,7 +87,7 @@ void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
         for(size_t dim=0; dim<N; ++dim) {
             buffer[output_index++] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
         }
-        sampler.offset++;
+        ++sampler.offset;
     }
 }
 
@@ -108,6 +108,7 @@ void sample_vec(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
         for(size_t dim=0; dim<N; ++dim) {
             buffer[output_index][dim] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
         }
+        ++sampler.offset;
         ++output_index;
     }
 }
