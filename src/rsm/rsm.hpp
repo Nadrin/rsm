@@ -15,6 +15,7 @@
 
 #include "generators/pcg32.hpp"
 
+#include "samplers/random.hpp"
 #include "samplers/halton.hpp"
 #include "samplers/hammersley.hpp"
 #include "samplers/stratified.hpp"
