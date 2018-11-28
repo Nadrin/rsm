@@ -9,7 +9,7 @@
 #include <cassert>
 #include <cstdint>
 
-#include "detail/lds.hpp"
+#include "detail/ldsperm.hpp"
 
 namespace rsm {
 

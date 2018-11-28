@@ -10,7 +10,7 @@
 #include <cstdint>
 
 #include "detail/primes.hpp"
-#include "detail/lds.hpp"
+#include "detail/ldsperm.hpp"
 
 #include "generators/pcg32.hpp"
 

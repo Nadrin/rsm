@@ -12,10 +12,11 @@ target_sources(rsm INTERFACE
   rsm/range.hpp
   rsm/utils.hpp
   rsm/detail/common.hpp
-  rsm/detail/lds.hpp
+  rsm/detail/ldsperm.hpp
   rsm/detail/memory.hpp
   rsm/detail/primes.hpp
   rsm/generators/pcg32.hpp
   rsm/samplers/halton.hpp
+  rsm/samplers/hammersley.hpp
   rsm/samplers/stratified.hpp
 )
