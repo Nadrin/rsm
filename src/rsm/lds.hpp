@@ -45,4 +45,10 @@ T radical_inverse_scrambled(uint16_t base, const uint16_t* perm, uint64_t value)
     return inverse * inv_base_n;
 }
 
+template<typename LowDiscrepancySampler>
+void reset(const LowDiscrepancySampler& sampler)
+{
+    sampler.offset = 0;
+}
+
 } // rsm
