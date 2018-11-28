@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <array>
+#include <type_traits>
 
 #include "../detail/common.hpp"
 #include "../lds.hpp"

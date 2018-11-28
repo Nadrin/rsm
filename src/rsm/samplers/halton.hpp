@@ -8,8 +8,9 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <array>
-#include <utility>
+#include <type_traits>
 
 #include "../detail/common.hpp"
 #include "../lds.hpp"

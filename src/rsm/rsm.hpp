@@ -18,3 +18,4 @@
 #include "samplers/halton.hpp"
 #include "samplers/hammersley.hpp"
 #include "samplers/stratified.hpp"
+#include "samplers/lhs.hpp"

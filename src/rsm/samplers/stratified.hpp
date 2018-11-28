@@ -9,13 +9,15 @@
 #include <cstddef>
 #include <cstdint>
 #include <array>
-#include <utility>
+#include <type_traits>
 
 #include "../detail/common.hpp"
 #include "../next.hpp"
 #include "../range.hpp"
 #include "../options.hpp"
 #include "../utils.hpp"
+
+#include "lhs.hpp"
 
 namespace rsm {
 
@@ -93,24 +95,7 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
     }
     // Otherwise perform Latin hypercube sampling (LHS).
     else {
-        size_t output_index = 0;
-        Scalar delta = Scalar(1.0) / requested_samples;
-        if(sampler.options & opt::jitter) {
-            for(size_t i=0; i<requested_samples; ++i) {
-                for(unsigned int dim=0; dim<N; ++dim) {
-                    Scalar jitter = next<Scalar>(generator);
-                    buffer[output_index++] = detail::variate<Scalar>((i + jitter) * delta);
-                }
-            }
-        }
-        else {
-            for(size_t i=0; i<requested_samples; ++i) {
-                for(unsigned int dim=0; dim<N; ++dim) {
-                    buffer[output_index++] = detail::variate<Scalar>((i + Scalar(0.5)) * delta);
-                }
-            }
-        }
-        shuffle_inner<N>(generator, &buffer[0], &buffer[N * requested_samples]);
+        sample<N>(lhs_sampler{sampler.options}, generator, buffer, requested_samples);
     }
 }
 
@@ -155,28 +140,7 @@ void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator,
     }
     // Otherwise perform Latin hypercube sampling (LHS).
     else {
-        Scalar delta = Scalar(1.0) / requested_samples;
-        if(sampler.options & opt::jitter) {
-            for(size_t i=0; i<requested_samples; ++i) {
-                for(unsigned int dim=0; dim<N; ++dim) {
-                    Scalar jitter = next<Scalar>(generator);
-                    buffer[i][dim] = detail::variate<Scalar>((i + jitter) * delta);
-                }
-            }
-        }
-        else {
-            for(size_t i=0; i<requested_samples; ++i) {
-                for(unsigned int dim=0; dim<N; ++dim) {
-                    buffer[i][dim] = detail::variate<Scalar>((i + Scalar(0.5)) * delta);
-                }
-            }
-        }
-        for(unsigned int dim=0; dim<N; ++dim) {
-            for(size_t i=0; i<requested_samples; ++i) {
-                uint32_t r = next(generator, i, requested_samples);
-                std::swap(buffer[i][dim], buffer[r][dim]);
-            }
-        }
+        sample_vec<N>(lhs_sampler{sampler.options}, generator, buffer, requested_samples);
     }
 }
 
