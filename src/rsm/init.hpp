@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cassert>
-#include <cstddef>
+#include <cstdint>
 
 #include "detail/primes.hpp"
 #include "detail/lds.hpp"
@@ -22,7 +22,7 @@ static_assert(RSM_MAX_LDS_DIMENSIONS >= 2, "RSM_MAX_LDS_DIMENSIONS must be at le
 
 namespace rsm {
 
-inline bool init(const allocator_t& allocator, size_t max_lds_dimensions = RSM_MAX_LDS_DIMENSIONS)
+inline bool init(const allocator_t& allocator, uint16_t max_lds_dimensions = RSM_MAX_LDS_DIMENSIONS)
 {
     assert(max_lds_dimensions >= 2);
     if(!detail::primes_t::get().initialize(max_lds_dimensions, allocator)) {
@@ -36,7 +36,7 @@ inline bool init(const allocator_t& allocator, size_t max_lds_dimensions = RSM_M
     return true;
 }
 
-inline bool init(size_t max_lds_dimensions = RSM_MAX_LDS_DIMENSIONS)
+inline bool init(uint16_t max_lds_dimensions = RSM_MAX_LDS_DIMENSIONS)
 {
     return init(detail::default_allocator(), max_lds_dimensions);
 }

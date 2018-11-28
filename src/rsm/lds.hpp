@@ -14,7 +14,7 @@
 namespace rsm {
 
 template<typename T>
-T radical_inverse(unsigned int base, uint64_t value)
+T radical_inverse(uint16_t base, uint64_t value)
 {
     assert(base >= 2);
     const T inv_base = T(1) / base;
@@ -30,7 +30,7 @@ T radical_inverse(unsigned int base, uint64_t value)
 }
 
 template<typename T>
-T radical_inverse_scrambled(unsigned int base, const uint16_t* perm, uint64_t value)
+T radical_inverse_scrambled(uint16_t base, const uint16_t* perm, uint64_t value)
 {
     assert(base >= 2);
     const T inv_base = T(1) / base;

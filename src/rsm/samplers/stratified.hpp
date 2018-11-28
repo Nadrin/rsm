@@ -19,46 +19,46 @@
 
 namespace rsm {
 
-template<size_t MaxDim>
+template<unsigned int MaxDim>
 struct stratified_sampler
 {
-    static_assert(MaxDim > 0, "MaxDim must not be zero");
+    static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
-    explicit stratified_sampler(size_t strata_count, options_t options=opt::jitter)
+    explicit stratified_sampler(unsigned int strata_count, options_t options=opt::jitter)
         : options(options)
     {
         strata.fill(strata_count);
     }
-    explicit stratified_sampler(const std::array<size_t, MaxDim>& strata, options_t options=opt::jitter)
+    explicit stratified_sampler(const std::array<unsigned int, MaxDim>& strata, options_t options=opt::jitter)
         : strata(strata)
         , options(options)
     {}
 
-    size_t total_strata(size_t N=MaxDim) const
+    size_t total_strata(unsigned int N=MaxDim) const
     {
         assert(N > 0 && N <= MaxDim);
-        size_t count = strata[0];
-        for(size_t i=1; i<N; ++i) {
+        unsigned int count = strata[0];
+        for(unsigned int i=1; i<N; ++i) {
             count *= strata[i];
         }
         return count;
     }
 
-    std::array<size_t, MaxDim> strata;
+    std::array<unsigned int, MaxDim> strata;
     options_t options;
 };
 
-template<size_t N, typename T, size_t MaxDim>
+template<unsigned int N, typename T, unsigned int MaxDim>
 range_t<N, T> range(T* buffer, const stratified_sampler<MaxDim>& sampler, uint16_t stride=1)
 {
     std::array<size_t, N> range_size;
-    for(size_t i=0; i<N; ++i) {
+    for(unsigned int i=0; i<N; ++i) {
         range_size[i] = sampler.strata[i];
     }
     return range_t<N, T>{buffer, range_size, stride};
 }
 
-template<size_t N, typename T, typename Generator, size_t MaxDim>
+template<unsigned int N, typename T, typename Generator, unsigned int MaxDim>
 void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* buffer, size_t count=0)
 {
     static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
@@ -69,12 +69,12 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
     // If # of requested samples matches strata configuration do regular sampling.
     if(requested_samples == sampler.total_strata(N)) {
         Scalar delta[N];
-        for(size_t dim=0; dim<N; ++dim) {
+        for(unsigned int dim=0; dim<N; ++dim) {
             delta[dim] = Scalar(1.0) / sampler.strata[dim];
         }
         if(sampler.options & opt::jitter) {
             for(auto it : range<N>(buffer, sampler, N)) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     Scalar jitter = next<Scalar>(generator);
                     it.value[dim] = detail::variate<Scalar>((it.index[dim] + jitter) * delta[dim]);
                 }
@@ -82,7 +82,7 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
         }
         else {
             for(auto it : range<N>(buffer, sampler, N)) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     it.value[dim] = detail::variate<Scalar>((it.index[dim] + Scalar(0.5)) * delta[dim]);
                 }
             }
@@ -97,7 +97,7 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
         Scalar delta = Scalar(1.0) / requested_samples;
         if(sampler.options & opt::jitter) {
             for(size_t i=0; i<requested_samples; ++i) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     Scalar jitter = next<Scalar>(generator);
                     buffer[output_index++] = detail::variate<Scalar>((i + jitter) * delta);
                 }
@@ -105,7 +105,7 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
         }
         else {
             for(size_t i=0; i<requested_samples; ++i) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     buffer[output_index++] = detail::variate<Scalar>((i + Scalar(0.5)) * delta);
                 }
             }
@@ -114,13 +114,13 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
     }
 }
 
-template<typename T, typename Generator, size_t MaxDim>
+template<typename T, typename Generator, unsigned int MaxDim>
 void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* buffer, size_t count=0)
 {
     sample<1>(sampler, generator, buffer, count);
 }
 
-template<size_t N, typename T, typename Generator, size_t MaxDim>
+template<unsigned int N, typename T, typename Generator, unsigned int MaxDim>
 void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* buffer, size_t count=0)
 {
     static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
@@ -131,12 +131,12 @@ void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator,
     // If # of requested samples matches strata configuration do regular sampling.
     if(requested_samples == sampler.total_strata(N)) {
         Scalar delta[N];
-        for(size_t dim=0; dim<N; ++dim) {
+        for(unsigned int dim=0; dim<N; ++dim) {
             delta[dim] = Scalar(1.0) / sampler.strata[dim];
         }
         if(sampler.options & opt::jitter) {
             for(auto it : range<N>(buffer, sampler)) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     Scalar jitter = next<Scalar>(generator);
                     (*it.value)[dim] = detail::variate<Scalar>((it.index[dim] + jitter) * delta[dim]);
                 }
@@ -144,7 +144,7 @@ void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator,
         }
         else {
             for(auto it : range<N>(buffer, sampler)) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     (*it.value)[dim] = detail::variate<Scalar>((it.index[dim] + Scalar(0.5)) * delta[dim]);
                 }
             }
@@ -158,7 +158,7 @@ void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator,
         Scalar delta = Scalar(1.0) / requested_samples;
         if(sampler.options & opt::jitter) {
             for(size_t i=0; i<requested_samples; ++i) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     Scalar jitter = next<Scalar>(generator);
                     buffer[i][dim] = detail::variate<Scalar>((i + jitter) * delta);
                 }
@@ -166,12 +166,12 @@ void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator,
         }
         else {
             for(size_t i=0; i<requested_samples; ++i) {
-                for(size_t dim=0; dim<N; ++dim) {
+                for(unsigned int dim=0; dim<N; ++dim) {
                     buffer[i][dim] = detail::variate<Scalar>((i + Scalar(0.5)) * delta);
                 }
             }
         }
-        for(size_t dim=0; dim<N; ++dim) {
+        for(unsigned int dim=0; dim<N; ++dim) {
             for(size_t i=0; i<requested_samples; ++i) {
                 uint32_t r = next(generator, i, requested_samples);
                 std::swap(buffer[i][dim], buffer[r][dim]);

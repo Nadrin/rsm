@@ -13,7 +13,7 @@
 
 namespace rsm {
 
-template<size_t N, typename T>
+template<unsigned int N, typename T>
 class range_t
 {
     static_assert(N > 0, "Number of dimensions must be non-zero");
@@ -56,7 +56,7 @@ public:
 
         iterator& operator++()
         {
-            for(size_t dim=0; dim<N; ++dim) {
+            for(unsigned int dim=0; dim<N; ++dim) {
                 if(++m_it.index[dim] < m_size[dim]) {
                     m_it.value += m_stride;
                     return *this;
@@ -106,7 +106,7 @@ public:
         return iterator(this, m_buffer + total_size() * m_stride);
     }
 
-    size_t size(size_t dim) const
+    size_t size(unsigned int dim) const
     {
         assert(dim < N);
         return m_size[dim];
@@ -127,7 +127,7 @@ private:
     uint16_t m_stride;
 };
 
-template<size_t N, typename T>
+template<unsigned int N, typename T>
 range_t<N, T> range(T* buffer, const std::array<size_t, N>& size, uint16_t stride=1)
 {
     return range_t<N, T>{buffer, size, stride};

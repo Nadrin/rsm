@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <cstddef>
+#include <cstdint>
 #include <cmath>
 
 #include "memory.hpp"
@@ -16,11 +16,11 @@ namespace detail {
 
 struct primes_t
 {
-    size_t N = 0;
-    unsigned int* p = nullptr;
-    unsigned int* sum = nullptr;
+    uint16_t N = 0;
+    uint32_t* p = nullptr;
+    uint32_t* sum = nullptr;
 
-    bool initialize(size_t num, const allocator_t& allocator)
+    bool initialize(uint16_t num, const allocator_t& allocator)
     {
         if(N > 0) {
             assert(p && sum);
@@ -28,11 +28,11 @@ struct primes_t
         }
 
         N = num;
-        p = detail::alloc<unsigned int>(allocator, N);
+        p = detail::alloc<uint32_t>(allocator, N);
         if(!p) {
             return false;
         }
-        sum = detail::alloc<unsigned int>(allocator, N+1);
+        sum = detail::alloc<uint32_t>(allocator, N+1);
         if(!sum) {
             detail::free(allocator, p);
             return false;
@@ -40,8 +40,8 @@ struct primes_t
 
         p[0] = 2;
         p[1] = 3;
-        size_t i=2;
-        for(unsigned int np = p[i-1] + 2; i<N; np += 2) {
+        uint16_t i=2;
+        for(uint32_t np = p[i-1] + 2; i<N; np += 2) {
             bool is_prime = true;
             for(unsigned int divisor = 2; divisor <= static_cast<unsigned int>(std::sqrt(np)); ++divisor) {
                 if((np % divisor) == 0) {
@@ -55,7 +55,7 @@ struct primes_t
         }
 
         sum[0] = 0;
-        for(size_t i=1; i<=N; ++i) {
+        for(unsigned int i=1; i<=N; ++i) {
             sum[i] = sum[i-1] + p[i-1];
         }
         return true;

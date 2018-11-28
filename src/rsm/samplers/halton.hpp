@@ -16,10 +16,10 @@
 
 namespace rsm {
 
-template<size_t MaxDim>
+template<unsigned int MaxDim>
 struct halton_sampler
 {
-    static_assert(MaxDim > 0, "MaxDim must not be zero");
+    static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
     explicit halton_sampler(unsigned int dim, uint64_t offset=0)
         : offset(offset)
@@ -28,21 +28,21 @@ struct halton_sampler
         const auto& g_permutations = detail::lds_permutations_t::get();
 
         assert(dim + MaxDim <= g_primes.N);
-        for(size_t i=0; i<MaxDim; ++i) {
+        for(unsigned int i=0; i<MaxDim; ++i) {
             base[i] = g_primes.p[dim+i];
             permutation[i] = &g_permutations.p[g_primes.sum[dim+i]];
         }
     }
 
-    std::array<unsigned int, MaxDim> base;
+    std::array<uint32_t, MaxDim> base;
     std::array<const uint16_t*, MaxDim> permutation;
     mutable uint64_t offset;
 };
 
 namespace detail {
 
-template<typename T, size_t MaxDim>
-T sample_halton(const halton_sampler<MaxDim>& sampler, size_t dim, size_t offset)
+template<typename T, unsigned int MaxDim>
+T sample_halton(const halton_sampler<MaxDim>& sampler, unsigned int dim, uint64_t offset)
 {
     assert(dim < MaxDim);
     if(sampler.base[dim] <= 3) {
@@ -56,27 +56,27 @@ T sample_halton(const halton_sampler<MaxDim>& sampler, size_t dim, size_t offset
 
 } // detail
 
-template<typename T, size_t MaxDim>
+template<typename T, unsigned int MaxDim>
 T sample(const halton_sampler<MaxDim>& sampler)
 {
     return detail::sample_halton<T>(sampler, 0, sampler.offset++);
 }
 
-template<size_t N, typename T, size_t MaxDim>
+template<unsigned int N, typename T, unsigned int MaxDim>
 T sample_vec(const halton_sampler<MaxDim>& sampler)
 {
-    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
+    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions is not in valid range");
 
     T v;
     using Scalar = typename std::decay<decltype(v[0])>::type;
-    for(size_t dim=0; dim<N; ++dim) {
+    for(unsigned int dim=0; dim<N; ++dim) {
         v[dim] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
     }
     ++sampler.offset;
     return v;
 }
 
-template<size_t N, typename T, size_t MaxDim>
+template<unsigned int N, typename T, unsigned int MaxDim>
 void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 {
     static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
@@ -84,20 +84,20 @@ void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 
     size_t output_index = 0;
     for(size_t i=0; i<count; ++i) {
-        for(size_t dim=0; dim<N; ++dim) {
+        for(unsigned int dim=0; dim<N; ++dim) {
             buffer[output_index++] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
         }
         ++sampler.offset;
     }
 }
 
-template<typename T, size_t MaxDim>
+template<typename T, unsigned int MaxDim>
 void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 {
     sample<1>(sampler, buffer, count);
 }
 
-template<size_t N, typename T, size_t MaxDim>
+template<unsigned int N, typename T, unsigned int MaxDim>
 void sample_vec(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 {
     static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
@@ -105,7 +105,7 @@ void sample_vec(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 
     size_t output_index = 0;
     for(size_t i=0; i<count; ++i) {
-        for(size_t dim=0; dim<N; ++dim) {
+        for(unsigned int dim=0; dim<N; ++dim) {
             buffer[output_index][dim] = detail::sample_halton<Scalar>(sampler, dim, sampler.offset);
         }
         ++sampler.offset;

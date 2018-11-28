@@ -7,7 +7,6 @@
 #pragma once
 
 #include <cassert>
-#include <cstddef>
 #include <cstdint>
 
 #include "common.hpp"
@@ -19,7 +18,7 @@ namespace detail {
 
 struct lds_permutations_t
 {
-    size_t N = 0;
+    uint32_t N = 0;
     uint16_t* p = nullptr;
 
     template<typename Generator>
@@ -38,9 +37,9 @@ struct lds_permutations_t
         }
 
         uint16_t* p_offset = p;
-        for(size_t i=0; i<primes.N; ++i) {
-            const unsigned int pn = primes.p[i];
-            for(size_t j=0; j<pn; ++j) {
+        for(uint32_t i=0; i<primes.N; ++i) {
+            const uint32_t pn = primes.p[i];
+            for(uint32_t j=0; j<pn; ++j) {
                 p_offset[j] = static_cast<uint16_t>(j);
             }
             // Don't shuffle first two dimensions as the distribution is good even without scrambling.
