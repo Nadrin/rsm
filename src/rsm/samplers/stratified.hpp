@@ -61,7 +61,7 @@ range_t<N, T> range(T* buffer, const stratified_sampler<MaxDim>& sampler, uint16
 template<unsigned int N, typename T, typename Generator, unsigned int MaxDim>
 void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* buffer, size_t count=0)
 {
-    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
+    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype(buffer[0])>::type;
 
     size_t requested_samples = (count > 0) ? count : sampler.total_strata(N);
@@ -123,7 +123,7 @@ void sample(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* 
 template<unsigned int N, typename T, typename Generator, unsigned int MaxDim>
 void sample_vec(const stratified_sampler<MaxDim>& sampler, Generator& generator, T* buffer, size_t count=0)
 {
-    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
+    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype((*buffer)[0])>::type;
 
     size_t requested_samples = (count > 0) ? count : sampler.total_strata(N);

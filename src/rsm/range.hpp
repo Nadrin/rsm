@@ -16,7 +16,7 @@ namespace rsm {
 template<unsigned int N, typename T>
 class range_t
 {
-    static_assert(N > 0, "Number of dimensions must be non-zero");
+    static_assert(N > 0, "Number of dimensions must be greater than zero");
 public:
     class iterator
     {

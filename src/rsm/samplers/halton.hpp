@@ -79,7 +79,7 @@ T sample_vec(const halton_sampler<MaxDim>& sampler)
 template<unsigned int N, typename T, unsigned int MaxDim>
 void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 {
-    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
+    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype(buffer[0])>::type;
 
     size_t output_index = 0;
@@ -100,7 +100,7 @@ void sample(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 template<unsigned int N, typename T, unsigned int MaxDim>
 void sample_vec(const halton_sampler<MaxDim>& sampler, T* buffer, size_t count)
 {
-    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions out of range");
+    static_assert(N > 0 && N <= MaxDim, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype((*buffer)[0])>::type;
 
     size_t output_index = 0;
