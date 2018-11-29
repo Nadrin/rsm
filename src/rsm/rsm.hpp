@@ -13,6 +13,7 @@
 #include "range.hpp"
 #include "utils.hpp"
 
+#include "generators/stlcompat.hpp"
 #include "generators/pcg32.hpp"
 
 #include "samplers/random.hpp"
