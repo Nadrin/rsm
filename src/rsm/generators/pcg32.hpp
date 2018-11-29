@@ -31,6 +31,9 @@
 #include <cstdint>
 #include <limits>
 
+#include "../detail/common.hpp"
+#include "../next.hpp"
+
 namespace rsm {
 
 class pcg32
@@ -81,4 +84,19 @@ private:
     uint64_t m_inc;
 };
 
+namespace detail {
+
+template<>
+inline float next(next_value_t<float>, pcg32& generator)
+{
+    return u32_as_float(generator());
+}
+
+template<>
+inline double next(next_value_t<double>, pcg32& generator)
+{
+    return static_cast<double>(u32_as_float(generator()));
+}
+
+} // detail
 } // rsm
