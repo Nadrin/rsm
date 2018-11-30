@@ -42,13 +42,13 @@ public:
         : m_state(0x27c6003152ca78dull)
     {}
 
-    splitmix64(uint64_t state)
-        : m_state(state)
+    splitmix64(uint64_t s)
+        : m_state(s)
     {}
 
-    void seed(uint64_t state)
+    void seed(uint64_t s)
     {
-        m_state = state;
+        m_state = s;
     }
 
     result_type operator()()

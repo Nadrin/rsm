@@ -34,6 +34,8 @@
 #include "../detail/common.hpp"
 #include "../next.hpp"
 
+#include "splitmix64.hpp"
+
 namespace rsm {
 
 class pcg32
@@ -46,15 +48,28 @@ public:
         , m_inc(0xda3e39cb94b95bdbull)
     {}
 
-    pcg32(uint64_t initstate, uint64_t initseq)
+    pcg32(uint64_t s)
     {
-        seed(initstate, initseq);
+        seed(s);
     }
 
-    void seed(uint64_t initstate, uint64_t initseq)
+    pcg32(uint64_t initstate, uint64_t initstream)
+    {
+        seed(initstate, initstream);
+    }
+
+    void seed(uint64_t s)
+    {
+        splitmix64 g(s);
+        uint64_t initstate = g();
+        uint64_t initstream = g();
+        seed(initstate, initstream);
+    }
+
+    void seed(uint64_t initstate, uint64_t initstream)
     {
         m_state = 0;
-        m_inc = (initseq << 1u) | 1u;
+        m_inc = (initstream << 1u) | 1u;
         (*this)();
         m_state += initstate;
         (*this)();
