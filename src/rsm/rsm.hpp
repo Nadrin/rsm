@@ -16,6 +16,8 @@
 #include "generators/stlcompat.hpp"
 #include "generators/pcg32.hpp"
 #include "generators/splitmix64.hpp"
+#include "generators/xoroshiro64s.hpp"
+#include "generators/xoroshiro128p.hpp"
 
 #include "samplers/random.hpp"
 #include "samplers/halton.hpp"
