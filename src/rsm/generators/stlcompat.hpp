@@ -30,7 +30,7 @@ inline double next(next_value_t<double>, std::mt19937& generator)
 template<>
 inline float next(next_value_t<float>, std::mt19937_64& generator)
 {
-    return static_cast<float>(u64_as_double(generator()));
+    return u32_as_float(static_cast<uint32_t>(generator()));
 }
 
 template<>

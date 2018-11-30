@@ -5,7 +5,7 @@
  */
 
 /*
- * This file contains an implementation of PCG32 random number generator adapted for rsm.
+ * This file contains an implementation of PCG32 random number generator adapted for RSM.
  * Original C implementation Copyright (c) 2014 Melissa O'Neill <oneill@pcg-random.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,8 +42,8 @@ public:
     using result_type = uint32_t;
 
     pcg32()
-        : m_state(0x853c49e6748fea9bULL)
-        , m_inc(0xda3e39cb94b95bdbULL)
+        : m_state(0x853c49e6748fea9bull)
+        , m_inc(0xda3e39cb94b95bdbull)
     {}
 
     pcg32(uint64_t initstate, uint64_t initseq)
@@ -63,7 +63,7 @@ public:
     result_type operator()()
     {
         uint64_t oldstate = m_state;
-        m_state = oldstate * 6364136223846793005ULL + m_inc;
+        m_state = oldstate * 6364136223846793005ull + m_inc;
         uint32_t xorshifted = ((oldstate >> 18u) ^ oldstate) >> 27u;
         uint32_t rot = oldstate >> 59u;
         return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
