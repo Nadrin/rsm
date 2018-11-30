@@ -15,6 +15,7 @@
 
 #include "generators/stlcompat.hpp"
 #include "generators/pcg32.hpp"
+#include "generators/splitmix64.hpp"
 
 #include "samplers/random.hpp"
 #include "samplers/halton.hpp"
