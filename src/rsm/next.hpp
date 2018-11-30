@@ -72,12 +72,24 @@ inline float next(next_value_t<float>, Generator& generator)
 }
 
 template<typename Generator>
+inline float next(next_value_t<float>, Generator& generator, float scale)
+{
+    return next(detail::next_value_t<float>{}, generator) * scale;
+}
+
+template<typename Generator>
 inline double next(next_value_t<double>, Generator& generator)
 {
     // This method introduces slight bias but we need it to be fast & general enough to handle various min/max generator values.
     // See: http://mumble.net/~campbell/tmp/random_real.c
     constexpr double inv_range = 1.0 / (Generator::max() - Generator::min());
     return detail::variate<double>((generator() - Generator::min()) * inv_range);
+}
+
+template<typename Generator>
+inline double next(next_value_t<double>, Generator& generator, double scale)
+{
+    return next(detail::next_value_t<double>{}, generator) * scale;
 }
 
 } // detail
