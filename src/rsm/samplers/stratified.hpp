@@ -26,27 +26,27 @@ struct stratified_sampler
 {
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
-    explicit stratified_sampler(unsigned int strata_count, options_t options=opt::jitter)
+    explicit stratified_sampler(uint32_t strata_count, options_t options=opt::jitter)
         : options(options)
     {
         strata.fill(strata_count);
     }
-    explicit stratified_sampler(const std::array<unsigned int, MaxDim>& strata, options_t options=opt::jitter)
+    explicit stratified_sampler(const std::array<uint32_t, MaxDim>& strata, options_t options=opt::jitter)
         : strata(strata)
         , options(options)
     {}
 
-    size_t total_strata(unsigned int N=MaxDim) const
+    uint32_t total_strata(unsigned int N=MaxDim) const
     {
         assert(N > 0 && N <= MaxDim);
-        unsigned int count = strata[0];
+        uint32_t count = strata[0];
         for(unsigned int i=1; i<N; ++i) {
             count *= strata[i];
         }
         return count;
     }
 
-    std::array<unsigned int, MaxDim> strata;
+    std::array<uint32_t, MaxDim> strata;
     options_t options;
 };
 
