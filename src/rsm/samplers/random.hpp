@@ -13,14 +13,17 @@
 
 namespace rsm {
 
+// Dummy struct for ensuring proper overload resolution.
+struct random_sampler{};
+
 template<typename T, typename Generator>
-T sample(Generator& generator)
+T sample(random_sampler, Generator& generator)
 {
     return next<T>(generator);
 }
 
 template<unsigned int N, typename T, typename Generator>
-T sample_vec(Generator& generator)
+T sample_vec(random_sampler, Generator& generator)
 {
     static_assert(N > 0, "Requested number of dimensions is not in valid range");
 
@@ -33,7 +36,7 @@ T sample_vec(Generator& generator)
 }
 
 template<unsigned int N, typename T, typename Generator>
-void sample(Generator& generator, T* buffer, size_t count)
+void sample(random_sampler, Generator& generator, T* buffer, size_t count)
 {
     static_assert(N > 0, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype(buffer[0])>::type;
@@ -47,13 +50,13 @@ void sample(Generator& generator, T* buffer, size_t count)
 }
 
 template<typename T, typename Generator>
-void sample(Generator& generator, T* buffer, size_t count)
+void sample(random_sampler, Generator& generator, T* buffer, size_t count)
 {
     sample<1>(generator, buffer, count);
 }
 
 template<unsigned int N, typename T, typename Generator>
-void sample_vec(Generator& generator, T* buffer, size_t count)
+void sample_vec(random_sampler, Generator& generator, T* buffer, size_t count)
 {
     static_assert(N > 0, "Requested number of dimensions is not in valid range");
     using Scalar = typename std::decay<decltype((*buffer)[0])>::type;
