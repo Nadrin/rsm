@@ -24,3 +24,8 @@
 #include "samplers/hammersley.hpp"
 #include "samplers/stratified.hpp"
 #include "samplers/lhs.hpp"
+
+#include "distributions/ncube.hpp"
+#include "distributions/disk.hpp"
+#include "distributions/sphere.hpp"
+#include "distributions/hemisphere.hpp"

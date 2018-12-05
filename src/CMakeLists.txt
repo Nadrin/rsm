@@ -15,8 +15,18 @@ target_sources(rsm INTERFACE
   rsm/detail/ldsperm.hpp
   rsm/detail/memory.hpp
   rsm/detail/primes.hpp
+  rsm/distributions/disk.hpp
+  rsm/distributions/hemisphere.hpp
+  rsm/distributions/ncube.hpp
+  rsm/distributions/sphere.hpp
   rsm/generators/pcg32.hpp
+  rsm/generators/splitmix64.hpp
+  rsm/generators/stlcompat.hpp
+  rsm/generators/xoroshiro128p.hpp
+  rsm/generators/xoroshiro64s.hpp
   rsm/samplers/halton.hpp
   rsm/samplers/hammersley.hpp
+  rsm/samplers/lhs.hpp
+  rsm/samplers/random.hpp
   rsm/samplers/stratified.hpp
 )
