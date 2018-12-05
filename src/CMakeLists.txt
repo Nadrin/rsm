@@ -29,4 +29,5 @@ target_sources(rsm INTERFACE
   rsm/samplers/lhs.hpp
   rsm/samplers/random.hpp
   rsm/samplers/stratified.hpp
+  rsm/montecarlo/heuristics.hpp
 )

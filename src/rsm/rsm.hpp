@@ -29,3 +29,5 @@
 #include "distributions/disk.hpp"
 #include "distributions/sphere.hpp"
 #include "distributions/hemisphere.hpp"
+
+#include "montecarlo/heuristics.hpp"
