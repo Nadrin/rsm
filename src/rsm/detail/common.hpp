@@ -10,18 +10,28 @@
 #include <cstdint>
 #include <limits>
 #include <algorithm>
+#include <type_traits>
 
 namespace rsm {
 namespace detail {
+
+template<typename T> constexpr T pi() = delete;
+template<> constexpr float  pi() { return 3.14159265f; }
+template<> constexpr double pi() { return 3.14159265358979324; }
+
+template<typename T> constexpr T inv_pi() = delete;
+template<> constexpr float  inv_pi() { return 1.0f / pi<float>(); }
+template<> constexpr double inv_pi() { return 1.0 / pi<double>(); }
 
 template<typename T> constexpr T one_minus_eps() = delete;
 template<> constexpr float  one_minus_eps() { return 0.99999994f; }
 template<> constexpr double one_minus_eps() { return 0.99999999999999989; }
 
-template<typename T, typename U> constexpr T inv_max()
+template<typename T>
+struct component
 {
-    return 1.0 / std::numeric_limits<U>::max();
-}
+    using type = typename std::decay<decltype(std::declval<T>()[0])>::type;
+};
 
 // Make sure random variate is kept in [0..1) range.
 template<typename T>
