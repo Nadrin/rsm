@@ -73,6 +73,8 @@ private:
     uint64_t m_state;
 };
 
+using default_generator = splitmix64;
+
 namespace detail {
 
 template<>
