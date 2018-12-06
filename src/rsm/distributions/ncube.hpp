@@ -32,8 +32,8 @@ U ncube_pdf(const U* min, const U* max)
     return U(1.0) / volume;
 }
 
-template<unsigned int N, typename T>
-T ncube(const T& min, const T& max, const T& u)
+template<unsigned int N, typename T, typename V>
+T ncube(const T& min, const T& max, const V& u)
 {
     static_assert(N > 0, "Number of dimensions must be greater than zero");
 
@@ -68,8 +68,8 @@ U rectangle_pdf(const U* min, const U* max)
     return U(1.0) / ((max[0] - min[0]) * (max[1] - min[1]));
 }
 
-template<typename T>
-T rectangle(const T& min, const T& max, const T& u)
+template<typename T, typename V>
+T rectangle(const T& min, const T& max, const V& u)
 {
     return ncube<2>(min, max, u);
 }

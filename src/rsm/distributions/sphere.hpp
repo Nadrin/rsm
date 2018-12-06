@@ -38,8 +38,8 @@ T sphere(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T sphere(U radius, const T& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T sphere(U radius, const V& u)
 {
     T r;
     sphere(radius, u[0], u[1], r[0], r[1], r[2]);

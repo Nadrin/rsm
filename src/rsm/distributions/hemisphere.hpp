@@ -38,8 +38,8 @@ T hemisphere(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T hemisphere(U radius, const T& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T hemisphere(U radius, const V& u)
 {
     T r;
     hemisphere(radius, u[0], u[1], r[0], r[1], r[2]);
@@ -85,8 +85,8 @@ T hemisphere_cosine(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T hemisphere_cosine(U radius, const T& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T hemisphere_cosine(U radius, const V& u)
 {
     T r;
     hemisphere_cosine(radius, u[0], u[1], r[0], r[1], r[2]);
@@ -117,8 +117,8 @@ T hemisphere_cosine_concentric(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T hemisphere_cosine_concentric(U radius, const T& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T hemisphere_cosine_concentric(U radius, const V& u)
 {
     T r;
     hemisphere_cosine_concentric(radius, u[0], u[1], r[0], r[1], r[2]);

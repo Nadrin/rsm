@@ -36,8 +36,8 @@ T disk(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T disk(U radius, const U& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T disk(U radius, const V& u)
 {
     T r;
     disk(radius, u[0], u[1], r[0], r[1], r[2]);
@@ -90,8 +90,8 @@ T disk_concentric(U radius, U u1, U u2)
     return r;
 }
 
-template<typename T, typename U=typename detail::component<T>::type>
-T disk_concentric(U radius, const U& u)
+template<typename T, typename V, typename U=typename detail::component<T>::type>
+T disk_concentric(U radius, const V& u)
 {
     T r;
     disk_concentric(radius, u[0], u[1], r[0], r[1], r[2]);
