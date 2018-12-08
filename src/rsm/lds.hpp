@@ -9,6 +9,7 @@
 #include <cassert>
 #include <cstdint>
 
+#include "detail/primes.hpp"
 #include "detail/ldsperm.hpp"
 
 namespace rsm {
@@ -43,6 +44,23 @@ T radical_inverse_scrambled(uint16_t base, const uint16_t* perm, uint64_t value)
         inv_base_n *= inv_base;
     }
     return inverse * inv_base_n;
+}
+
+template<typename T>
+T radical_inverse(unsigned int dim, uint16_t base, const uint16_t* perm, uint64_t value)
+{
+    // Halton & Hammersley sequences for bases 2 and 3 exhibit reasonably good distribution and don't need to be scrambled.
+    switch(dim) {
+    case 0:
+        return radical_inverse<T>(2, value);
+    case 1:
+        return radical_inverse<T>(3, value);
+#ifndef RSM_NO_RIJUMPTABLE
+#include "detail/rijumptable.inl"
+#endif
+    default:
+        return radical_inverse_scrambled<T>(base, perm, value);
+    }
 }
 
 template<typename LowDiscrepancySampler>

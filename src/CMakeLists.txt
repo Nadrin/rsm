@@ -15,6 +15,7 @@ target_sources(rsm INTERFACE
   rsm/detail/ldsperm.hpp
   rsm/detail/memory.hpp
   rsm/detail/primes.hpp
+  rsm/detail/rijumptable.inl
   rsm/distributions/disk.hpp
   rsm/distributions/hemisphere.hpp
   rsm/distributions/ncube.hpp

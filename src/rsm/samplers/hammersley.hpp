@@ -23,7 +23,8 @@ struct hammersley_sampler
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
     hammersley_sampler(unsigned int dim, size_t max_samples, uint64_t offset=0)
-        : offset(offset)
+        : base_dim(dim)
+        , offset(offset)
     {
         assert(max_samples > 0);
         inv_max_samples = FloatType(1.0) / max_samples;
@@ -46,6 +47,7 @@ struct hammersley_sampler
     FloatType inv_max_samples;
     std::array<uint32_t, MaxDim-1> base;
     std::array<const uint16_t*, MaxDim-1> permutation;
+    unsigned int base_dim;
     mutable uint64_t offset;
 };
 
@@ -60,12 +62,9 @@ T sample_hammersley(const hammersley_sampler<MaxDim>& sampler, unsigned int dim,
     if(dim == 0) {
         return detail::variate<T>(offset * T(sampler.inv_max_samples));
     }
-    else if(sampler.base[dim-1] <= 3) {
-        // Halton sequences for bases 2 and 3 exhibit reasonably good distribution and don't need to be scrambled.
-        return detail::variate<T>(radical_inverse<T>(sampler.base[dim-1], offset));
-    }
     else {
-        return detail::variate<T>(radical_inverse_scrambled<T>(sampler.base[dim-1], sampler.permutation[dim-1], offset));
+        unsigned int dim_offset = sampler.base_dim + dim - 1;
+        return detail::variate<T>(radical_inverse<T>(dim_offset, sampler.base[dim-1], sampler.permutation[dim-1], offset));
     }
 }
 

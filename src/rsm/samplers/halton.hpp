@@ -23,7 +23,8 @@ struct halton_sampler
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
     explicit halton_sampler(unsigned int dim, uint64_t offset=0)
-        : offset(offset)
+        : base_dim(dim)
+        , offset(offset)
     {
         const auto& g_primes = detail::primes_t::get();
         const auto& g_permutations = detail::lds_permutations_t::get();
@@ -37,6 +38,7 @@ struct halton_sampler
 
     std::array<uint32_t, MaxDim> base;
     std::array<const uint16_t*, MaxDim> permutation;
+    unsigned int base_dim;
     mutable uint64_t offset;
 };
 
@@ -46,13 +48,8 @@ template<typename T, unsigned int MaxDim>
 T sample_halton(const halton_sampler<MaxDim>& sampler, unsigned int dim, uint64_t offset)
 {
     assert(dim < MaxDim);
-    if(sampler.base[dim] <= 3) {
-        // Halton sequences for bases 2 and 3 exhibit reasonably good distribution and don't need to be scrambled.
-        return detail::variate<T>(radical_inverse<T>(sampler.base[dim], offset));
-    }
-    else {
-        return detail::variate<T>(radical_inverse_scrambled<T>(sampler.base[dim], sampler.permutation[dim], offset));
-    }
+    unsigned int dim_offset = sampler.base_dim + dim;
+    return detail::variate<T>(radical_inverse<T>(dim_offset, sampler.base[dim], sampler.permutation[dim], offset));
 }
 
 } // detail
