@@ -22,7 +22,7 @@ struct hammersley_sampler
 {
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
-    hammersley_sampler(unsigned int dim, size_t max_samples, uint64_t offset=0)
+    explicit hammersley_sampler(size_t max_samples, unsigned int dim=0, uint64_t offset=0)
         : base_dim(dim)
         , offset(offset)
     {

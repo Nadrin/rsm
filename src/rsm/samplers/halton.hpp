@@ -22,7 +22,7 @@ struct halton_sampler
 {
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
-    explicit halton_sampler(unsigned int dim, uint64_t offset=0)
+    explicit halton_sampler(unsigned int dim=0, uint64_t offset=0)
         : base_dim(dim)
         , offset(offset)
     {

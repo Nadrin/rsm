@@ -26,7 +26,7 @@ struct stratified_sampler
 {
     static_assert(MaxDim > 0, "Maximum dimension must be greater than zero");
 
-    explicit stratified_sampler(uint32_t strata_count, options_t options=opt::jitter)
+    explicit stratified_sampler(uint32_t strata_count=1, options_t options=opt::jitter)
         : options(options)
     {
         strata.fill(strata_count);
